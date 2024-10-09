@@ -4,29 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Countdown Timer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400&display=swap" rel="stylesheet">
     <style>
+        /* Ensure the body takes full height and centers content */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             text-align: center;
-            background: url('https://source.unsplash.com/1600x900/?nature,water') no-repeat center center fixed;
-            background-size: cover;
             margin: 0;
             padding: 0;
             color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(270deg, #ff7eb3, #ff5e9e, #ff3f81, #ff3f68);
+            background-size: 200% 200%;
+            animation: fluidGradient 20s ease infinite;
         }
+
+        /* Fluid background animation */
+        @keyframes fluidGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Style for the heading */
         h1 {
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            animation: fadeIn 2s ease-in-out;
-            margin-top: 50px;
-        }
-        #countdown {
+            font-family: 'Dancing Script', cursive;
             font-size: 48px;
-            color: #e74c3c;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-            animation: pulse 1s infinite;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Countdown number styling */
+        #countdown {
+            font-size: 60px;
+            color: #ffcc00;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
             margin-top: 20px;
         }
+
+        /* Fade-in effect */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -35,12 +64,33 @@
                 opacity: 1;
             }
         }
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
+
+        /* Footer text */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px; /* Smaller heading on mobile */
             }
-            50% {
-                transform: scale(1.1);
+
+            #countdown {
+                font-size: 40px; /* Smaller countdown text */
+            }
+
+            .footer {
+                font-size: 14px; /* Smaller footer text */
+                bottom: 10px; /* Adjust footer position */
+            }
+
+            body {
+                padding: 20px; /* Add padding for better layout on small screens */
             }
         }
     </style>
@@ -49,6 +99,11 @@
     <h1>Countdown to 10 October 2024</h1>
     <div id="countdown">Loading...</div>
 
+    <div class="footer">Created with ❤️ by Fawaz Amajida</div>
+
+    <audio id="partyMusic" src="your-music-file.mp3" loop autoplay></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.4.0/confetti.browser.min.js"></script>
     <script>
         const countdownElement = document.getElementById('countdown');
         const targetDate = new Date("Oct 10, 2024 00:00:00").getTime();
@@ -67,10 +122,38 @@
             if (timeLeft < 0) {
                 clearInterval(interval);
                 countdownElement.innerHTML = "The event has started!";
+                startConfetti();
             }
         };
 
         const interval = setInterval(updateCountdown, 1000);
+
+        const startConfetti = () => {
+            const duration = 5 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    angle: Math.random() * 360,
+                    spread: 70,
+                    startVelocity: 30,
+                    elementCount: 70,
+                    dragFriction: 0.1,
+                    duration: 3000,
+                    stagger: 100,
+                    width: "10px",
+                    height: "10px",
+                    colors: ['#FFC700', '#FF5733', '#FF33A8', '#FFCC00', '#FF7EB3']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            })();
+        };
+
+        const partyMusic = document.getElementById('partyMusic');
+        partyMusic.volume = 0.5;
     </script>
 </body>
 </html>
